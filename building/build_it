@@ -1,0 +1,13 @@
+#!/bin/bash
+home_base=/home/marki/hdrihds12
+cd $home_base
+test -d build_scripts || git clone -b consolidated git@github.com:markito3/build_scripts
+source /data/gluex/gluex_top/gluex_env_boot.sh $home_base/build_scripts
+gxenv $home_base/version.xml
+export VERBOSE=1
+export HALLD_SIM_SCONS_OPTIONS="SHOWBUILD=1"
+if ! make -f $BUILD_SCRIPTS/Makefile_hddm; then exit 1; fi
+if ! make -f $BUILD_SCRIPTS/Makefile_hd_interface; then exit 1; fi
+if ! make -f $BUILD_SCRIPTS/Makefile_halld_sim; then exit 1; fi
+if ! make -f $BUILD_SCRIPTS/Makefile_hdgeant4; then exit 1; fi
+if ! make -f $BUILD_SCRIPTS/Makefile_gluex_root_analysis; then exit 1; fi
